@@ -19,7 +19,6 @@ export default function Photos() {
   const { isOwner, isLoading, clientIp } = useAuth();
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [loadingPhotos, setLoadingPhotos] = useState(true);
-  const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
   const [dragActive, setDragActive] = useState(false);
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -118,7 +117,7 @@ export default function Photos() {
     <div className="min-h-screen bg-background py-8">
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold">Photo Gallery</h1>
+          <h1 className="text-3xl font-bold">recents</h1>
           <Link 
             href="/"
             className="text-blue-600 hover:text-blue-500 font-medium"
@@ -127,10 +126,9 @@ export default function Photos() {
           </Link>
         </div>
 
-        {isOwner ? (
-          <div className="space-y-8">
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
-              <h2 className="text-xl font-semibold mb-4">Upload Photos</h2>
+        {isOwner && (
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm mb-8">
+            <h2 className="text-xl font-semibold mb-4">Upload Photos</h2>
               <div className="w-full max-w-md mx-auto">
                 <div
                   className={`relative border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
@@ -185,107 +183,51 @@ export default function Photos() {
                   Access granted from IP: {clientIp}
                 </p>
               )}
-            </div>
-            
-            <div>
-              <h2 className="text-xl font-semibold mb-4">Your Photos</h2>
+          </div>
+        )}
+
+        <div>
               {photos.length === 0 ? (
                 <div className="text-center py-12">
                   <p className="text-gray-500 dark:text-gray-400">No photos uploaded yet.</p>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <div className="flex flex-wrap gap-4">
                   {photos.map((photo) => (
-                    <div key={photo.id} className="relative group">
-                      <div 
-                        className="aspect-square relative overflow-hidden rounded-lg cursor-pointer hover:shadow-lg transition-shadow"
-                        onClick={() => setSelectedPhoto(photo)}
-                      >
-                        <Image
-                          src={photo.url}
-                          alt={photo.originalName}
-                          fill
-                          className="object-cover"
-                          sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                        />
-                      </div>
-                      
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDelete(photo.id);
+                    <div key={photo.id} className="relative group inline-block">
+                      <img
+                        src={photo.url}
+                        alt={photo.originalName}
+                        className="rounded-lg hover:shadow-lg transition-shadow w-full h-64"
+                        onLoad={(e) => {
+                          const img = e.target as HTMLImageElement;
+                          const aspectRatio = img.naturalWidth / img.naturalHeight;
+                          const targetHeight = 256;
+                          const calculatedWidth = targetHeight * aspectRatio;
+                          img.style.width = `${calculatedWidth}px`;
+                          img.style.height = `${targetHeight}px`;
                         }}
-                        className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
-                        title="Delete photo"
-                      >
-                        ×
-                      </button>
+                      />
+                      
+                      {isOwner && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDelete(photo.id);
+                          }}
+                          className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
+                          title="Delete photo"
+                        >
+                          ×
+                        </button>
+                      )}
                     </div>
                   ))}
                 </div>
               )}
-            </div>
-          </div>
-        ) : (
-          <div className="text-center py-12">
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-8 shadow-sm max-w-md mx-auto">
-              <h2 className="text-xl font-semibold mb-4">Photo Gallery</h2>
-              <p className="text-gray-600 dark:text-gray-400 mb-4">
-              </p>
-              {photos.length === 0 ? (
-                <p className="text-gray-500 dark:text-gray-400">No photos available.</p>
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                  {photos.map((photo) => (
-                    <div key={photo.id} className="relative group">
-                      <div 
-                        className="aspect-square relative overflow-hidden rounded-lg cursor-pointer hover:shadow-lg transition-shadow"
-                        onClick={() => setSelectedPhoto(photo)}
-                      >
-                        <Image
-                          src={photo.url}
-                          alt={photo.originalName}
-                          fill
-                          className="object-cover"
-                          sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-              {clientIp && (
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-4">
-                  Accessing from IP: {clientIp}
-                </p>
-              )}
-            </div>
-          </div>
-        )}
+        </div>
       </div>
 
-      {selectedPhoto && (
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4"
-          onClick={() => setSelectedPhoto(null)}
-        >
-          <div className="relative max-w-4xl max-h-full">
-            <button
-              onClick={() => setSelectedPhoto(null)}
-              className="absolute top-4 right-4 text-white text-2xl hover:text-gray-300 z-10"
-            >
-              ×
-            </button>
-            <Image
-              src={selectedPhoto.url}
-              alt={selectedPhoto.filename}
-              width={800}
-              height={600}
-              className="max-w-full max-h-full object-contain"
-            />
-          </div>
-        </div>
-      )}
     </div>
   );
 }
