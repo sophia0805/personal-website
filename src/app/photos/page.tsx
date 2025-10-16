@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from "next/link";
+import Image from "next/image";
 import { useAuth } from '../../lib/auth';
 
 interface Photo {
@@ -15,8 +16,10 @@ interface Photo {
 }
 
 export default function Photos() {
-  const { isOwner, clientIp } = useAuth();
+  const { isOwner, isLoading, clientIp } = useAuth();
   const [photos, setPhotos] = useState<Photo[]>([]);
+  const [loadingPhotos, setLoadingPhotos] = useState(true);
+  const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
   const [dragActive, setDragActive] = useState(false);
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -104,7 +107,7 @@ export default function Photos() {
     <div className="min-h-screen bg-background py-8">
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold">recents</h1>
+          <h1 className="text-3xl font-bold">recent photos</h1>
           <Link 
             href="/"
             className="text-blue-600 hover:text-blue-500 font-medium"
@@ -181,11 +184,12 @@ export default function Photos() {
               ) : (
                 <div className="flex flex-wrap gap-4">
                   {photos.map((photo) => (
-                    <div key={photo.id} className="relative group inline-block">
+                    <div key={photo.id} className="relative group inline-block cursor-pointer">
                       <img
                         src={photo.url}
                         alt={photo.originalName}
                         className="rounded-lg hover:shadow-lg transition-shadow w-full h-64"
+                        onClick={() => setSelectedPhoto(photo)}
                         onLoad={(e) => {
                           const img = e.target as HTMLImageElement;
                           const aspectRatio = img.naturalWidth / img.naturalHeight;
@@ -214,7 +218,23 @@ export default function Photos() {
               )}
         </div>
       </div>
-
+      {selectedPhoto && (
+        <div 
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          onClick={() => setSelectedPhoto(null)}
+        >
+          <div className="relative max-w-4xl max-h-full">
+            
+            <Image
+              src={selectedPhoto.url}
+              alt={selectedPhoto.filename}
+              width={800}
+              height={600}
+              className="max-w-full max-h-full object-contain"
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
