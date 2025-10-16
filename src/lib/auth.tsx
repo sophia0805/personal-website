@@ -15,20 +15,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const [clientIp, setClientIp] = useState<string>();
 
-  // Check IP on mount
   useEffect(() => {
     const checkIP = async () => {
-      try {
-        const response = await fetch('/api/check-ip');
-        const data = await response.json();
-        setIsOwner(data.isOwner);
-        setClientIp(data.clientIp);
-      } catch (error) {
-        console.error('Failed to check IP:', error);
-        setIsOwner(false);
-      } finally {
-        setIsLoading(false);
-      }
+      const response = await fetch('/api/check-ip');
+      const data = await response.json();
+      console.log('data', data)
+      setIsOwner(data.isOwner);
+      setClientIp(data.clientIp);
+      setIsLoading(false);
     };
 
     checkIP();

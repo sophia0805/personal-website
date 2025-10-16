@@ -8,7 +8,7 @@ export async function GET() {
   
   return NextResponse.json({
     success: true,
-    photos: photos.map(photo => ({
+    photos: photos.map((photo: any) => ({
       id: photo._id,
       filename: photo.filename,
       originalName: photo.originalName,

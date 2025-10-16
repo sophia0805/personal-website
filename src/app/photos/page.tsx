@@ -2,8 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from "next/link";
-import Image from "next/image";
-import { useAuth } from '../../components/AuthProvider';
+import { useAuth } from '../../lib/auth';
 
 interface Photo {
   id: string;
@@ -16,9 +15,8 @@ interface Photo {
 }
 
 export default function Photos() {
-  const { isOwner, isLoading, clientIp } = useAuth();
+  const { isOwner, clientIp } = useAuth();
   const [photos, setPhotos] = useState<Photo[]>([]);
-  const [loadingPhotos, setLoadingPhotos] = useState(true);
   const [dragActive, setDragActive] = useState(false);
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -27,7 +25,6 @@ export default function Photos() {
     const response = await fetch('/api/photos');
     const result = await response.json();
     setPhotos(result.photos);
-    setLoadingPhotos(false);
   };
 
   useEffect(() => {
@@ -102,16 +99,6 @@ export default function Photos() {
     setPhotos(prev => prev.filter(p => p.id !== id));
   };
 
-  if (isLoading || loadingPhotos) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p>{isLoading ? 'Checking access...' : 'Loading photos...'}</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-background py-8">

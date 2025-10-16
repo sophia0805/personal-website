@@ -4,10 +4,11 @@ import Photo from '../../../../models/Photo';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   await connectDB();
-  const photo = await Photo.findById(params.id);
+  const { id } = await params;
+  const photo = await Photo.findById(id);
 
   return new NextResponse(photo.data, {
     headers: {
@@ -19,7 +20,7 @@ export async function GET(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const forwarded = request.headers.get('x-forwarded-for');
   const realIp = request.headers.get('x-real-ip');
@@ -36,7 +37,8 @@ export async function DELETE(
   }
 
   await connectDB();
-  await Photo.findByIdAndDelete(params.id);
+  const { id } = await params;
+  await Photo.findByIdAndDelete(id);
 
   return NextResponse.json({
     success: true,
