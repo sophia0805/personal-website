@@ -182,7 +182,7 @@ export default function Photos() {
                   <p className="text-gray-500 dark:text-gray-400">No photos uploaded yet.</p>
                 </div>
               ) : (
-                <div className="flex flex-wrap gap-4">
+                <div className="flex flex-wrap justify-center inset-0 gap-x-1.5 gap-y-12.5">
                   {photos.map((photo) => (
                     <div key={photo.id} className="relative group inline-block cursor-pointer">
                       <img
