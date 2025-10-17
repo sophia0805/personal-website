@@ -25,21 +25,21 @@ export default function PhotoLoop({ photos }: PhotoLoopProps) {
         {photos.map((photo) => (
           <div
             key={photo.id}
-            className="relative mx-4 w-64 h-40 border-2 border-dashed border-blue-600 rounded-lg p-2 bg-white shadow-sm hover:shadow-md transition-shadow"
+            className="relative mx-4 w-80 h-48 border-4 border-[#9D87C4] rounded-lg p-2 bg-white shadow-sm hover:shadow-md transition-shadow"
           >
             <Image
               src={photo.url}
               alt={photo.originalName}
               fill
               className="object-cover rounded"
-              sizes="(max-width: 768px) 192px, 192px"
+              sizes="300px 300px"
             />
           </div>
         ))}
         {photos.map((photo) => (
           <div
             key={`duplicate-${photo.id}`}
-            className="relative mx-4 w-64 h-40 border-2 border-blue-600 rounded-lg p-2 bg-white shadow-sm hover:shadow-md transition-shadow"
+            className="relative mx-4 w-80 h-48 border-4 border-[#9D87C4] rounded-lg p-2 bg-white shadow-sm hover:shadow-md transition-shadow"
           >
             <Image
               src={photo.url}

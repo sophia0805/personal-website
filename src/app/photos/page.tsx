@@ -11,14 +11,30 @@ export default function Photos() {
   const [dragActive, setDragActive] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [clientIp, setClientIp] = useState<string>();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const loadPhotos = async () => {
-    const response = await fetch('/api/photos');
-    const result = await response.json();
-    setPhotos(result.photos);
+    try {
+      const cachedData = localStorage.getItem('photos-cache');
+      const cacheTimestamp = localStorage.getItem('photos-cache-timestamp');
+      const now = Date.now();
+      const cacheExpiry = 5 * 60 * 1000;
+
+      if (cachedData && cacheTimestamp && (now - parseInt(cacheTimestamp)) < cacheExpiry) {
+        const parsed = JSON.parse(cachedData);
+        setPhotos(parsed.photos || []);
+        return;
+      }
+
+      const response = await fetch('/api/photos');
+      const result = await response.json();
+      setPhotos(result.photos || []);
+      localStorage.setItem('photos-cache', JSON.stringify(result));
+      localStorage.setItem('photos-cache-timestamp', now.toString());
+    } catch (error) {
+      console.error('Failed to load photos:', error);
+    }
   };
 
   useEffect(() => {
@@ -27,7 +43,6 @@ export default function Photos() {
       const data = await response.json();
       setIsOwner(data.isOwner);
       setClientIp(data.clientIp);
-      setIsLoading(false);
     };
     
     checkIP();
@@ -77,7 +92,12 @@ export default function Photos() {
       uploadedAt: new Date().toISOString(),
       url: photo.url
     };
-    setPhotos(prev => [newPhoto, ...prev]);
+    setPhotos(prev => {
+      const updated = [newPhoto, ...prev];
+      localStorage.setItem('photos-cache', JSON.stringify({ photos: updated }));
+      localStorage.setItem('photos-cache-timestamp', Date.now().toString());
+      return updated;
+    });
     setUploading(false);
   };
 
@@ -85,7 +105,12 @@ export default function Photos() {
 
   const handleDelete = async (id: string) => {
     await fetch(`/api/photos/${id}`, { method: 'DELETE' });
-    setPhotos(prev => prev.filter(p => p.id !== id));
+    setPhotos(prev => {
+      const updated = prev.filter(p => p.id !== id);
+      localStorage.setItem('photos-cache', JSON.stringify({ photos: updated }));
+      localStorage.setItem('photos-cache-timestamp', Date.now().toString());
+      return updated;
+    });
   };
 
 
@@ -93,7 +118,7 @@ export default function Photos() {
     <div className="min-h-screen bg-background py-8">
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold">recent photos</h1>
+          <h1 className="text-3xl font-bold">recents</h1>
           <Link 
             href="/"
             className="text-blue-600 hover:text-blue-500 font-medium"
