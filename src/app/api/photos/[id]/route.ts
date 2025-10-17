@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '../../../../lib/mongodb';
 import Photo from '../../../../models/Photo';
+import { checkAuth } from '../../../../lib/owner';
 
 export async function GET(
   request: NextRequest,
@@ -22,12 +23,7 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const forwarded = request.headers.get('x-forwarded-for');
-  const realIp = request.headers.get('x-real-ip');
-  const clientIp = forwarded?.split(',')[0] || realIp || 'unknown';
-  
-  const isLocalhost = clientIp === '::1' || clientIp.startsWith('192.168.');
-  const isOwner = clientIp === process.env.IP || (process.env.NODE_ENV === 'development' && isLocalhost);
+  const { isOwner } = checkAuth(request);
   
   if (!isOwner) {
     return NextResponse.json(

@@ -3,25 +3,16 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from "next/link";
 import Image from "next/image";
-import { useAuth } from '../../lib/auth';
-
-interface Photo {
-  id: string;
-  filename: string;
-  originalName: string;
-  mimeType: string;
-  size: number;
-  uploadedAt: string;
-  url: string;
-}
+import { PhotoResponse } from '../../models/Photo';
 
 export default function Photos() {
-  const { isOwner, isLoading, clientIp } = useAuth();
-  const [photos, setPhotos] = useState<Photo[]>([]);
-  const [loadingPhotos, setLoadingPhotos] = useState(true);
-  const [selectedPhoto, setSelectedPhoto] = useState<Photo | null>(null);
+  const [photos, setPhotos] = useState<PhotoResponse[]>([]);
+  const [selectedPhoto, setSelectedPhoto] = useState<PhotoResponse | null>(null);
   const [dragActive, setDragActive] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [isOwner, setIsOwner] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [clientIp, setClientIp] = useState<string>();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const loadPhotos = async () => {
@@ -31,17 +22,22 @@ export default function Photos() {
   };
 
   useEffect(() => {
+    const checkIP = async () => {
+      const response = await fetch('/api/check-ip');
+      const data = await response.json();
+      setIsOwner(data.isOwner);
+      setClientIp(data.clientIp);
+      setIsLoading(false);
+    };
+    
+    checkIP();
     loadPhotos();
   }, []);
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (e.type === "dragenter" || e.type === "dragover") {
-      setDragActive(true);
-    } else if (e.type === "dragleave") {
-      setDragActive(false);
-    }
+    setDragActive(e.type === "dragenter" || e.type === "dragover");
   };
 
   const handleDrop = (e: React.DragEvent) => {
@@ -49,14 +45,14 @@ export default function Photos() {
     e.stopPropagation();
     setDragActive(false);
     
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+    if (e.dataTransfer.files?.[0]) {
       handleFile(e.dataTransfer.files[0]);
     }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    if (e.target.files && e.target.files[0]) {
+    if (e.target.files?.[0]) {
       handleFile(e.target.files[0]);
     }
   };
@@ -71,34 +67,24 @@ export default function Photos() {
       body: formData,
     });
 
-    const result = await response.json();
-    const uploadedPhoto = {
-      ...file,
-      id: result.photo.id,
-      url: result.photo.url,
-    };
-
-    const newPhoto: Photo = {
-      id: uploadedPhoto.id,
-      filename: uploadedPhoto.name,
-      originalName: uploadedPhoto.name,
-      mimeType: uploadedPhoto.type,
-      size: uploadedPhoto.size,
+    const { photo } = await response.json();
+    const newPhoto: PhotoResponse = {
+      id: photo.id,
+      filename: file.name,
+      originalName: file.name,
+      mimeType: file.type,
+      size: file.size,
       uploadedAt: new Date().toISOString(),
-      url: uploadedPhoto.url
+      url: photo.url
     };
     setPhotos(prev => [newPhoto, ...prev]);
     setUploading(false);
   };
 
-  const onButtonClick = () => {
-    fileInputRef.current?.click();
-  };
+  const onButtonClick = () => fileInputRef.current?.click();
 
   const handleDelete = async (id: string) => {
-    await fetch(`/api/photos/${id}`, {
-      method: 'DELETE',
-    });
+    await fetch(`/api/photos/${id}`, { method: 'DELETE' });
     setPhotos(prev => prev.filter(p => p.id !== id));
   };
 

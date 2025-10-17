@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '../../../lib/mongodb';
-import Photo from '../../../models/Photo';
+import Photo, { PhotoResponse } from '../../../models/Photo';
+import { checkAuth } from '../../../lib/owner';
 
 export async function GET() {
   await connectDB();
@@ -8,7 +9,7 @@ export async function GET() {
   
   return NextResponse.json({
     success: true,
-    photos: photos.map((photo: any) => ({
+    photos: photos.map((photo: any): PhotoResponse => ({
       id: photo._id,
       filename: photo.filename,
       originalName: photo.originalName,
@@ -21,12 +22,7 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const forwarded = request.headers.get('x-forwarded-for');
-  const realIp = request.headers.get('x-real-ip');
-  const clientIp = forwarded?.split(',')[0] || realIp || 'unknown';
-  
-  const isLocalhost = clientIp === '::1' || clientIp.startsWith('192.168.');
-  const isOwner = clientIp === process.env.IP || (process.env.NODE_ENV === 'development' && isLocalhost);
+  const { isOwner } = checkAuth(request);
   
   if (!isOwner) {
     return NextResponse.json(
@@ -63,6 +59,6 @@ export async function POST(request: NextRequest) {
       size: photo.size,
       uploadedAt: photo.uploadedAt,
       url: `/api/photos/${photo._id}`
-    }
+    } as PhotoResponse
   });
 }

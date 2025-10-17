@@ -9,6 +9,16 @@ export interface IPhoto extends Document {
   data: Buffer;
 }
 
+export interface PhotoResponse {
+  id: string;
+  filename: string;
+  originalName: string;
+  mimeType: string;
+  size: number;
+  uploadedAt: string;
+  url: string;
+}
+
 const PhotoSchema: Schema = new Schema({
   filename: {
     type: String,
