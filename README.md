@@ -5,19 +5,10 @@ a personal website showcasing me as a student!
 
 ## features
 - homepage with animated photo marquee and social links
-- photo gallery (/moments) with drag-and-drop upload functionality (owner-only)
+- photo gallery (/moments) with upload functionality (if you're the owner)
 - currently page showing what i'm working on + spotify integration
-- responsive design with dark mode support
 - mongodb integration for photo storage
 - ip-based authentication for admin features
-- spotify api integration for currently playing music
-
-## pages
-- `/` - main homepage with intro and photo carousel
-- `/currently` - what i'm up to right now + spotify integration
-- `/moments` - photo gallery with upload capabilities
-- `/api/photos` - photo management api
-- `/api/currently-playing` - spotify integration api
 
 ## installation
 1. clone the repository
@@ -48,22 +39,11 @@ a personal website showcasing me as a student!
 5. open your browser
    navigate to [http://localhost:3000](http://localhost:3000)
 
-## tech stack
-- next.js 15 with app router
-- react 19 with typescript
-- tailwind css for styling
-- mongodb with mongoose for photo storage
-- spotify web api for music integration
-- vercel for deployment
+## history
+- added photo uploads for myself so i can upload from any device as long as i add my ip
+- implemented mongodb for photo storage instead of local files
+- added spotify integration to show currently playing music and my fav song
+- i struggled a lot with the photo circling thing since i had to figure out how to make it scroll down instead of sideways
 
-## development journey
-- started with a simple static site, then added dynamic photo uploads
-- implemented mongodb for persistent photo storage instead of local files
-- added spotify integration to show currently playing music
-- created ip-based authentication system for admin photo uploads
-- built responsive design with smooth animations and hover effects
-- added caching for better performance and reduced api calls
-- integrated drag-and-drop file uploads for better ux
-
-### live site:
-![](https://hc-cdn.hel1.your-objectstorage.com/s/v3/327dd817897d301a541fce4386a6839b010f5b69_image.png)
+### finished product
+![](https://hc-cdn.hel1.your-objectstorage.com/s/v3/01c6eb35ea007e86d63139a4e857998edd431dfd_image.png)
