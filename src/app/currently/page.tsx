@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState, useEffect } from 'react';
 
 export default function Currently() {
-  const [currentTrack, setCurrentTrack] = useState(null);
+  const [currentTrack, setCurrentTrack] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -136,7 +136,7 @@ export default function Currently() {
               <div className="flex-1 min-w-0">
                 <h3 className="font-medium text-gray-900 dark:text-gray-100 truncate">{currentTrack.name}</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
-                  {currentTrack.artists.map(artist => artist.name).join(', ')}
+                  {currentTrack.artists.map((artist: any) => artist.name).join(', ')}
                 </p>
               </div>
               
