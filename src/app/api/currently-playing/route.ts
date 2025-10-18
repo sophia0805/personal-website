@@ -54,6 +54,7 @@ export async function GET() {
 
     return NextResponse.json({
       isPlaying: song.is_playing,
+      id: song.item.id,
       title: song.item.name,
       artist: song.item.artists.map((artist: any) => artist.name).join(', '),
       album: song.item.album.name,
