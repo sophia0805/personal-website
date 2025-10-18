@@ -8,7 +8,7 @@ export default function Currently() {
       <div className="absolute top-8 right-8">
         <Link 
           href="/"
-          className="text-p-600 hover:text-purple-500 font-medium"
+          className="text-purple-600 hover:text-gray-500 font-medium"
         >
           ← Back to Home
         </Link>

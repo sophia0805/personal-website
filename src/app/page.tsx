@@ -37,9 +37,9 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-background flex">
       <div className="w-1/2 flex flex-col items-center justify-center pt-16 pb-8">
-        <h1 className="text-8xl font-bold mb-2 text-center text-gray-800">hihi! i'm sophia</h1>
-        <p className="text-lg text-center mb-8 ml-16">i'm a student from atlanta exploring computer science and biology through building projects.
-          when i'm not studying, you can find me taking sunset photos or baking with friends.</p>
+        <h1 className="text-8xl font-bold mb-2 text-center text-gray-900 border-b-4 border-purple-600/20 pb-4">hihi! i'm sophia</h1>
+        <p className="text-lg text-center mb-8 ml-16">i'm a student from atlanta, georgia. i'm interested in exploring both computer science and biology (specifically gene expression) by building projects.
+          when i'm not studying, you can find me taking sunset photos or baking with friends!</p>
         <div className="flex justify-center space-x-6 mb-8">
           <a 
             href="https://www.linkedin.com/in/sophia-wang-3a68b1313/" 
@@ -104,18 +104,20 @@ export default function Home() {
           </a>
         </div>
         
-        <div className="space-x-4 mb-12 text-center">
+        <div className="space-x-8 mb-16 text-center">
           <Link 
             href="/currently"
-            className="inline-block px-8 py-4 bg-purple-100 text-purple-700 rounded-full hover:bg-purple-200 transition-all duration-300 font-medium shadow-sm hover:shadow-md border border-purple-200 hover:border-purple-300"
+            className="text-xl text-gray-800 hover:text-gray-500 transition-all duration-300 font-medium relative group"
           >
-            currently
+            <span className="relative z-10">/currently</span>
+            <span className="absolute inset-0 bg-purple-600/20 scale-x-100 group-hover:scale-x-0 transition-transform duration-300 origin-left"></span>
           </Link>
           <Link 
             href="/photos"
-            className="inline-block px-8 py-4 bg-purple-100 text-purple-700 rounded-full hover:bg-purple-200 transition-all duration-300 font-medium shadow-sm hover:shadow-md border border-purple-200 hover:border-purple-300"
+            className="text-xl text-gray-800 hover:text-gray-500 transition-all duration-300 font-medium relative group"
           >
-            moments
+            <span className="relative z-10">/moments</span>
+            <span className="absolute inset-0 bg-purple-600/20 scale-x-100 group-hover:scale-x-0 transition-transform duration-300 origin-left"></span>
           </Link>
         </div>
       </div>

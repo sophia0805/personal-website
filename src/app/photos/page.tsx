@@ -121,7 +121,7 @@ export default function Photos() {
           <h1 className="text-3xl font-bold">recents</h1>
           <Link 
             href="/"
-            className="text-blue-600 hover:text-blue-500 font-medium"
+            className="text-purple-600 hover:text-gray-500 font-medium"
           >
             ← Back to Home
           </Link>
@@ -193,21 +193,21 @@ export default function Photos() {
                   <p className="text-gray-500 dark:text-gray-400">No photos uploaded yet.</p>
                 </div>
               ) : (
-                <div className="flex flex-wrap justify-center inset-0 gap-x-1.5 gap-y-12.5">
+                <div className="columns-1 md:columns-2 lg:columns-3 xl:columns-4 gap-12 space-y-2">
                   {photos.map((photo) => (
-                    <div key={photo.id} className="relative group inline-block cursor-pointer">
+                    <div key={photo.id} className="relative group cursor-pointer break-inside-avoid mb-2">
                       <img
                         src={photo.url}
                         alt={photo.originalName}
-                        className="rounded-lg hover:shadow-lg transition-shadow w-full h-64"
+                        className="rounded-lg hover:shadow-lg transition-shadow w-full object-cover"
                         onClick={() => setSelectedPhoto(photo)}
                         onLoad={(e) => {
                           const img = e.target as HTMLImageElement;
                           const aspectRatio = img.naturalWidth / img.naturalHeight;
-                          const targetHeight = 256;
-                          const calculatedWidth = targetHeight * aspectRatio;
-                          img.style.width = `${calculatedWidth}px`;
-                          img.style.height = `${targetHeight}px`;
+                          const targetWidth = 256;
+                          const calculatedHeight = targetWidth / aspectRatio;
+                          img.style.width = `${targetWidth}px`;
+                          img.style.height = `${calculatedHeight}px`;
                         }}
                       />
                       
