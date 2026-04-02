@@ -1,4 +1,4 @@
-04/02 - 10:45 AM
+# 04/02 - 10:45 AM
 
 assume there exists a predictor, who is really good at predicting people and their choices. you walk into a room with two boxes: one box, which we can deem box 1, has $1000, guaranteed. the other box, box 2, either has $0 or $1,000,000. you are given the option: choose only box 2, or choose both boxes. however, if the predictor predicts that you will choose both boxes, it will put $0 in box 2. if the predictor predicts that you will choose only box 2, it will put $1,000,000 in box 2. this prediction is made before you know about the problem. as far as you know, every person who has chosen one box has walked out a millionare, and every person who has chosen two boxes has walked out with only $1,000. would you choose two boxes or only box 2?  
 
