@@ -1,0 +1,11 @@
+04/02 - 10:45 AM
+
+assume there exists a predictor, who is really good at predicting people and their choices. you walk into a room with two boxes: one box, which we can deem box 1, has $1000, guaranteed. the other box, box 2, either has $0 or $1,000,000. you are given the option: choose only box 2, or choose both boxes. however, if the predictor predicts that you will choose both boxes, it will put $0 in box 2. if the predictor predicts that you will choose only box 2, it will put $1,000,000 in box 2. this prediction is made before you know about the problem. as far as you know, every person who has chosen one box has walked out a millionare, and every person who has chosen two boxes has walked out with only $1,000. would you choose two boxes or only box 2?  
+
+when i first heard about newcomb's paradox, my reaction was immediate: one box, obviously. which idiot would choose two boxes? however, i kept thinking. if the prediction is made before you heard about the problem, if you choose two boxes, you walk away with $1,000 more than if you chose one box, no matter what the predictor puts in box 2. now, seeing the problem from both sides, i became indecisive, so i took to polling my friends -- they all immediately said one box, to which i started defending two-boxers. i wanted to teach them both sides of the argument.
+
+was i simply playing devil's advocate, or did i truly believe in two boxes? i'm not quite sure still. 
+
+while i might not have succeeded in convincing them to choose two boxes, my ultimate goal sparked conversation and provoked critical thinking as i explained both perspectives. thought experiments like newcomb's paradox make me think about myself and my values, and i think that's part of the reason why they intrigue me so much -- why i go around, asking everyone on their opinion no matter how annoying it can be.
+
+i want to be better at considering other's perspectives on things, rather than outright saying no. hopefully, small things like newcomb's paradox will help me toward this goal.
